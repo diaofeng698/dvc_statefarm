@@ -1,0 +1,5 @@
+[core]
+    remote = s3-remote
+['remote "s3-remote"']
+    url = s3://harman-adasdc-dc-space2-incabin-sh-dms/SBD_Data/statefarm/
+    region = cn-northwest-1
