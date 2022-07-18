@@ -13,3 +13,4 @@ stages:
         cache: false
     plots:
     - dvclive/train_accuracy.jpg
+    - dvclive/train_loss.jpg

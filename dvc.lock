@@ -8,21 +8,24 @@ stages:
       size: 951460430
       nfiles: 22426
     - path: src
-      md5: 0014aad993bdb01e37892a1e4a58df08.dir
-      size: 13668
-      nfiles: 2
+      md5: 80d1d9a5eedc54d51c01118721793f91.dir
+      size: 13660
+      nfiles: 3
     params:
       params.yaml:
         batch_size: 64
         classes: 10
-        epochs: 20
+        epochs: 2
         learning_rate: 0.0015
         stopping_patience: 10
     outs:
     - path: dvclive.json
-      md5: e19852a2aa67fc3beaae36e6df4f6a30
-      size: 249
+      md5: 45d86c5d9209fc62a44e8fcf88ca6b7f
+      size: 248
+    - path: dvclive/train_accuracy.jpg
+      md5: 34b7add22f7d5dbd78440af17ab0f072
+      size: 23746
     - path: weights
-      md5: 3912ab492bb88004d3d21b3e442c7703.dir
-      size: 14575832
+      md5: bf98d1e5d1032ff5d7ba9da40025fce7.dir
+      size: 14573434
       nfiles: 4

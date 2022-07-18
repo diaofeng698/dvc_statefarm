@@ -110,9 +110,9 @@ if __name__ == '__main__':
             train_image.append([img, label, driver])
 
     print('total images:', len(train_image))
-    save_img_name = map[train_image[-1][1]] + \
-        '_driver' + train_image[-1][-1] + '.jpg'
-    cv2.imwrite(save_img_name, train_image[-1][0])
+    # save_img_name = map[train_image[-1][1]] + \
+    #     '_driver' + train_image[-1][-1] + '.jpg'
+    # cv2.imwrite(save_img_name, train_image[-1][0])
 
 
 # ______________________Splitting the train, valid and test dataset_________________________
@@ -200,7 +200,7 @@ if __name__ == '__main__':
     plt.ylabel('loss')
     plt.xlabel('epochs')
     plt.legend(['training', 'validation'], loc='upper right')
-    plt.savefig('train_loss.jpg')
+    plt.savefig(os.path.join("dvclive", "train_loss.jpg"))
 
     plt.plot(mobilenet_history.history['sparse_categorical_accuracy'])
     plt.plot(mobilenet_history.history['val_sparse_categorical_accuracy'])
