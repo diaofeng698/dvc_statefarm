@@ -1,0 +1,17 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: SF_dataset
+      md5: b64b70aaada97af152fc9c8e61205b66.dir
+      size: 951460430
+      nfiles: 22426
+    - path: src/train.py
+      md5: d4ed35f734f1e88253c55b404b01ddba
+      size: 8014
+    outs:
+    - path: weights
+      md5: 6ff548bd85bd4c8597732954e86fb2bd.dir
+      size: 14573334
+      nfiles: 4

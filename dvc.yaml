@@ -1,0 +1,8 @@
+stages:
+  train:
+    cmd: python src/train.py
+    deps:
+    - SF_dataset
+    - src/train.py
+    outs:
+    - weights
