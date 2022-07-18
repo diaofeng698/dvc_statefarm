@@ -167,7 +167,7 @@ if __name__ == '__main__':
 
 # ___________________________Model Train_______________________________________
 
-    opt = tf.keras.optimizers.SGD(learning_rate=config.learning_rate)
+    opt = tf.keras.optimizers.SGD(learning_rate=learning_rate)
     acc = tf.keras.metrics.SparseCategoricalAccuracy()
     model.compile(
         optimizer=opt, loss='sparse_categorical_crossentropy', metrics=[acc])
