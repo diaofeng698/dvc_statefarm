@@ -1,0 +1,28 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: SF_dataset
+      md5: b64b70aaada97af152fc9c8e61205b66.dir
+      size: 951460430
+      nfiles: 22426
+    - path: src
+      md5: f9d4f6ef22c6af7c22bad25516b0e3ca.dir
+      size: 13671
+      nfiles: 2
+    params:
+      params.yaml:
+        batch_size: 64
+        classes: 10
+        epochs: 2
+        learning_rate: 0.0015
+        stopping_patience: 10
+    outs:
+    - path: dvclive.json
+      md5: 82939f6ffc48b019a8751e90b10de5f1
+      size: 248
+    - path: weights
+      md5: 4cf802434bbe3cd05b26a93a26aadcf3.dir
+      size: 14573434
+      nfiles: 4

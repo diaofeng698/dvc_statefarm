@@ -1,0 +1,11 @@
+{
+    "step": 1,
+    "train": {
+        "loss": 0.44918668270111084,
+        "sparse_categorical_accuracy": 0.946989119052887
+    },
+    "eval": {
+        "loss": 1.2204408645629883,
+        "sparse_categorical_accuracy": 0.6071674823760986
+    }
+}

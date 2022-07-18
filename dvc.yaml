@@ -9,8 +9,5 @@ stages:
     outs:
     - weights
     metrics:
-    - metrics.json:
-        cache: false
-    plots:
-    - plots:
+    - dvclive.json:
         cache: false
