@@ -8,21 +8,21 @@ stages:
       size: 951460430
       nfiles: 22426
     - path: src
-      md5: f9d4f6ef22c6af7c22bad25516b0e3ca.dir
-      size: 13671
+      md5: 0014aad993bdb01e37892a1e4a58df08.dir
+      size: 13668
       nfiles: 2
     params:
       params.yaml:
         batch_size: 64
         classes: 10
-        epochs: 2
+        epochs: 20
         learning_rate: 0.0015
         stopping_patience: 10
     outs:
     - path: dvclive.json
-      md5: 82939f6ffc48b019a8751e90b10de5f1
-      size: 248
+      md5: e19852a2aa67fc3beaae36e6df4f6a30
+      size: 249
     - path: weights
-      md5: 4cf802434bbe3cd05b26a93a26aadcf3.dir
-      size: 14573434
+      md5: 3912ab492bb88004d3d21b3e442c7703.dir
+      size: 14575832
       nfiles: 4

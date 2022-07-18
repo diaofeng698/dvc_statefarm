@@ -11,3 +11,5 @@ stages:
     metrics:
     - dvclive.json:
         cache: false
+    plots:
+    - dvclive/train_accuracy.jpg

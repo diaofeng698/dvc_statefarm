@@ -194,29 +194,29 @@ if __name__ == '__main__':
 
     # Can be replaced by online version
 
-    # plt.plot(mobilenet_history.history['loss'])
-    # plt.plot(mobilenet_history.history['val_loss'])
-    # plt.title('loss vs epochs')
-    # plt.ylabel('loss')
-    # plt.xlabel('epochs')
-    # plt.legend(['training', 'validation'], loc='upper right')
-    # plt.savefig('train_loss.jpg')
+    plt.plot(mobilenet_history.history['loss'])
+    plt.plot(mobilenet_history.history['val_loss'])
+    plt.title('loss vs epochs')
+    plt.ylabel('loss')
+    plt.xlabel('epochs')
+    plt.legend(['training', 'validation'], loc='upper right')
+    plt.savefig('train_loss.jpg')
 
-    # plt.plot(mobilenet_history.history['sparse_categorical_accuracy'])
-    # plt.plot(mobilenet_history.history['val_sparse_categorical_accuracy'])
-    # plt.title('accuracy vs epochs')
-    # plt.ylabel('accuracy')
-    # plt.xlabel('epochs')
-    # plt.legend(['training', 'validation'], loc='lower right')
-    # plt.savefig('train_accuracy.jpg')
+    plt.plot(mobilenet_history.history['sparse_categorical_accuracy'])
+    plt.plot(mobilenet_history.history['val_sparse_categorical_accuracy'])
+    plt.title('accuracy vs epochs')
+    plt.ylabel('accuracy')
+    plt.xlabel('epochs')
+    plt.legend(['training', 'validation'], loc='lower right')
+    plt.savefig(os.path.join("dvclive", "train_accuracy.jpg"))
 
 
 # ____________________________ Evaluate on test dataset_______________________________
-#    loss, acc = model.evaluate(X_test_array, y_test_array)
-#    print(f'last epoch loss: {loss}')
-#    print(f'last epoch test accuracy:{acc:.2%}')
-#
-#    model_load = tf.keras.models.load_model(save_weights_path)
-#    loss, acc = model_load.evaluate(X_test_array, y_test_array)
-#    print(f'best loss: {loss}')
-#    print(f'best test accuracy:{acc:.2%}')
+    loss, acc = model.evaluate(X_test_array, y_test_array)
+    print(f'last epoch loss: {loss}')
+    print(f'last epoch test accuracy:{acc:.2%}')
+
+    model_load = tf.keras.models.load_model(save_weights_path)
+    loss, acc = model_load.evaluate(X_test_array, y_test_array)
+    print(f'best loss: {loss}')
+    print(f'best test accuracy:{acc:.2%}')
