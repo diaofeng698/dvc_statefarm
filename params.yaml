@@ -1,0 +1,5 @@
+learning_rate = 0.0015
+batch_size = 64
+epochs = 2
+stopping_patience = 10
+classes = 10

@@ -12,8 +12,15 @@ from tensorflow.keras.applications.mobilenet import MobileNet
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 
-import wandb
-from wandb.keras import WandbCallback
+# import wandb
+# from wandb.keras import WandbCallback
+from ruamel.yaml import YAML
+from dvclive.keras import DvcLiveCallback
+
+# load params from params.yaml file
+yaml = YAML(typ="safe")
+with open("params.yaml") as f:
+    params = yaml.load(f)
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 '''
@@ -24,8 +31,8 @@ Operating Instructions:
 3 Configure map for classification and label mapping
 4 Configure classes for classification number
 5 Configure driver_valid_list  driver_test_list for dataset split
-6 Configure early stopping patience 
-7 Configure epochs 
+6 Configure early stopping patience
+7 Configure epochs
 ***************************************************
 '''
 
@@ -34,14 +41,19 @@ if __name__ == '__main__':
 
 # __________________________Wandb Online Version Train Visualization_________________________
 
-    wandb.init(project="MobileNet_Classification")
+    # wandb.init(project="MobileNet_Classification")
 
-    config = wandb.config
-    config.learning_rate = 0.0015
-    config.batch_size = 64
-    config.epochs = 1
-    config.stopping_patience = 10
-    config.classes = 10
+    # config = wandb.config
+    # config.learning_rate = 0.0015
+    # config.batch_size = 64
+    # config.epochs = 2
+    # config.stopping_patience = 10
+    # config.classes = 10
+    learning_rate = params['learning_rate']
+    batch_size = params['batch_size']
+    epochs = params['epochs']
+    stopping_patience = params['stopping_patience']
+    classes = params['classes']
 
 # 1 Configure weights_folder for saving model weights
 
@@ -75,7 +87,7 @@ if __name__ == '__main__':
 # 3 Configure map for classification and label mapping
 
     train_image = []
-    classes = config.classes
+    # classes = config.classes
 # 4 Configure classes for classification number
 
     for folder_index in range(classes):
@@ -148,7 +160,7 @@ if __name__ == '__main__':
         # imports the mobilenet model and discards the last 1000 neuron layer.
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
-        preds = Dense(config.classes, activation='softmax')(
+        preds = Dense(classes, activation='softmax')(
             x)  # final layer with softmax activation
         model = tf.keras.Model(inputs=base_model.input, outputs=preds)
     # print(model.summary())
@@ -162,7 +174,7 @@ if __name__ == '__main__':
     checkpointer = ModelCheckpoint(
         filepath=save_weights_path, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
     earlystopper = EarlyStopping(
-        monitor='val_loss', patience=config.stopping_patience, verbose=1, min_delta=0.001, mode='min')
+        monitor='val_loss', patience=stopping_patience, verbose=1, min_delta=0.001, mode='min')
 # 6 Configure early stopping patience
 
 
@@ -173,8 +185,9 @@ if __name__ == '__main__':
 #    train_data_generator = datagen.flow(X_valid,y_valid, batch_size=config.batch_size)
 
     # Fits the model on batches with real-time data augmentation:
-    mobilenet_history = model.fit(X_train, y_train, steps_per_epoch=len(X_train) / config.batch_size, callbacks=[checkpointer, earlystopper, WandbCallback()],
-                                  epochs=config.epochs, verbose=1, validation_data=(X_valid, y_valid))
+    # WandbCallback()
+    mobilenet_history = model.fit(X_train, y_train, steps_per_epoch=len(X_train) / batch_size, callbacks=[checkpointer, earlystopper, DvcLiveCallback()],
+                                  epochs=epochs, verbose=1, validation_data=(X_valid, y_valid))
 # 7 Configure epochs
 
 # __________________________Train Visualization_________________________
