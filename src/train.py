@@ -31,18 +31,18 @@ Operating Instructions:
 
 if __name__ == '__main__':
     root = os.getcwd()
-    
+
 # __________________________Wandb Online Version Train Visualization_________________________
 
     wandb.init(project="MobileNet_Classification")
 
     config = wandb.config
     config.learning_rate = 0.0015
-    config.batch_size = 8
+    config.batch_size = 64
     config.epochs = 100
     config.stopping_patience = 10
     config.classes = 10
-    
+
 # 1 Configure weights_folder for saving model weights
 
     weights_folder = 'weights'
@@ -53,20 +53,21 @@ if __name__ == '__main__':
 
     driver_file = 'driver_imgs_list.csv'
     dataset_folder = 'SF_dataset'
-    
+
 # 2 Configure driver_file, dataset_folder for reading datasets and labels
 
-    driver_details = pd.read_csv(os.path.join(root, dataset_folder, driver_file), na_values='na')
+    driver_details = pd.read_csv(os.path.join(
+        root, dataset_folder, driver_file), na_values='na')
     driver_details.set_index('img')
     print('driver list detail: ', driver_details.head(5))
     driver_list = list(driver_details['subject'].unique())
     print('driver list:', driver_list)
     print('total drivers:', len(driver_list))
     print(driver_details.groupby(by=['subject'])['img'].count())
-    class_distribution = driver_details.groupby(by=['classname'])['img'].count()
+    class_distribution = driver_details.groupby(by=['classname'])[
+        'img'].count()
     img_quantity = list(class_distribution.values)
     print('img amount of every class: ', img_quantity)
-
 
     map = {0: 'safe drive', 1: 'text-right', 2: 'phone-talk-right', 3: 'text-left',
            4: 'phone-talk-left', 5: 'operate-radio', 6: 'drink', 7: 'reach-behind',
@@ -81,7 +82,8 @@ if __name__ == '__main__':
         class_folder = 'c' + str(folder_index)
         print(f'now we are in the folder {class_folder}')
 
-        imgs_folder_path = os.path.join(root, dataset_folder, 'train', class_folder)
+        imgs_folder_path = os.path.join(
+            root, dataset_folder, 'train', class_folder)
         imgs = os.listdir(imgs_folder_path)
 
         for img_index in tqdm(range(len(imgs))):
@@ -90,12 +92,14 @@ if __name__ == '__main__':
             img = cv2.resize(img, (224, 224))
             img = np.repeat(img[..., np.newaxis], 3, -1)
             label = folder_index
-            driver = driver_details[driver_details['img'] == imgs[img_index]]['subject'].values[0]
+            driver = driver_details[driver_details['img']
+                                    == imgs[img_index]]['subject'].values[0]
 
             train_image.append([img, label, driver])
 
     print('total images:', len(train_image))
-    save_img_name = map[train_image[-1][1]] + '_driver' + train_image[-1][-1]  + '.jpg'
+    save_img_name = map[train_image[-1][1]] + \
+        '_driver' + train_image[-1][-1] + '.jpg'
     cv2.imwrite(save_img_name, train_image[-1][0])
 
 
@@ -112,11 +116,11 @@ if __name__ == '__main__':
 
     for image, label, driver in train_image:
         if driver in driver_test_list:
-          X_test.append(image)
-          y_test.append(label)
+            X_test.append(image)
+            y_test.append(label)
         elif driver in driver_valid_list:
-          X_valid.append(image)
-          y_valid.append(label)
+            X_valid.append(image)
+            y_valid.append(label)
         else:
             X_train.append(image)
             y_train.append(label)
@@ -139,11 +143,13 @@ if __name__ == '__main__':
     if False:
         model = tf.keras.models.load_model('weights_gray')
     else:
-        base_model = MobileNet(input_shape=(224, 224, 3), weights='imagenet', include_top=False)
+        base_model = MobileNet(input_shape=(224, 224, 3),
+                               weights='imagenet', include_top=False)
         # imports the mobilenet model and discards the last 1000 neuron layer.
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
-        preds = Dense(config.classes, activation='softmax')(x)  # final layer with softmax activation
+        preds = Dense(config.classes, activation='softmax')(
+            x)  # final layer with softmax activation
         model = tf.keras.Model(inputs=base_model.input, outputs=preds)
     # print(model.summary())
 
@@ -151,9 +157,12 @@ if __name__ == '__main__':
 
     opt = tf.keras.optimizers.SGD(learning_rate=config.learning_rate)
     acc = tf.keras.metrics.SparseCategoricalAccuracy()
-    model.compile(optimizer=opt, loss='sparse_categorical_crossentropy', metrics=[acc])
-    checkpointer = ModelCheckpoint(filepath=save_weights_path, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
-    earlystopper = EarlyStopping(monitor='val_loss', patience=config.stopping_patience, verbose=1, min_delta=0.001, mode='min')
+    model.compile(
+        optimizer=opt, loss='sparse_categorical_crossentropy', metrics=[acc])
+    checkpointer = ModelCheckpoint(
+        filepath=save_weights_path, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+    earlystopper = EarlyStopping(
+        monitor='val_loss', patience=config.stopping_patience, verbose=1, min_delta=0.001, mode='min')
 # 6 Configure early stopping patience
 
 
@@ -164,7 +173,7 @@ if __name__ == '__main__':
 #    train_data_generator = datagen.flow(X_valid,y_valid, batch_size=config.batch_size)
 
     # Fits the model on batches with real-time data augmentation:
-    mobilenet_history = model.fit(X_train, y_train, steps_per_epoch=len(X_train) / config.batch_size, callbacks=[checkpointer, earlystopper,WandbCallback()],
+    mobilenet_history = model.fit(X_train, y_train, steps_per_epoch=len(X_train) / config.batch_size, callbacks=[checkpointer, earlystopper, WandbCallback()],
                                   epochs=config.epochs, verbose=1, validation_data=(X_valid, y_valid))
 # 7 Configure epochs
 
@@ -198,6 +207,3 @@ if __name__ == '__main__':
 #    loss, acc = model_load.evaluate(X_test_array, y_test_array)
 #    print(f'best loss: {loss}')
 #    print(f'best test accuracy:{acc:.2%}')
-
-
-
